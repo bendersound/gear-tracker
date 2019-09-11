@@ -38,18 +38,31 @@ function submitForm()
   if (caseInfoText != "")
   {
     localStorage.setItem(caseIDText, caseInfoText);
-    alert('Stored info for ' + caseIDText);
+    popupDialog(caseIDText, 'Successfully updated info');
   }
   else
   {
-    alert(localStorage.getItem(caseIDText));
+    var storedCaseInfo = localStorage.getItem(caseIDText);
+    if (storedCaseInfo != null)
+    {
+      popupDialog(caseIDText, storedCaseInfo);
+    }
+    else
+    {
+      popupDialog('Case ID Not Found', 'This case does not exist!');
+    }
   }
+}
+
+function popupDialog(title, message)
+{
+  alert(message);
 }
 
 function clearLocalStorage()
 {
   localStorage.clear();
-  alert('Local storage cleared');
+  popupDialog('', 'Local storage cleared');
 }
 
 app.initialize();
