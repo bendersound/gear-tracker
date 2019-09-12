@@ -4,7 +4,9 @@ var app = {
     //initialize listeners
     document.addEventListener("deviceready", this.onDeviceReady.bind(this), false);
     document.getElementById("submitButton").addEventListener("click", submitForm);
-    document.getElementById("clearButton").addEventListener("click", clearLocalStorage);
+    document.getElementById("clearStorageButton").addEventListener("click", clearLocalStorage);
+    document.getElementById("cameraButton").addEventListener("click", openCamera);
+    document.getElementById("galleryButton").addEventListener("click", openGallery);
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
@@ -63,6 +65,49 @@ function clearLocalStorage()
 {
   localStorage.clear();
   popupDialog('', 'Local storage cleared');
+}
+
+function openCamera()
+{
+  navigator.camera.getPicture(onSuccess, onFail,
+  {
+    quality: 50,
+    destinationType: Camera.DestinationType.DATA_URL,
+    sourceType: Camera.PictureSourceType.CAMERA,
+    cameraDirection: Camera.BACK
+  });
+
+  function onSuccess(imageData)
+  {
+    var image = document.getElementById("testImage");
+    image.src = "data:image/jpeg;base64," + imageData;
+  }
+
+  function onFail(message)
+  {
+    popupDialog('Error!', message);
+  }
+}
+
+function openGallery()
+{
+  navigator.camera.getPicture(onSuccess, onFail,
+  {
+    quality: 50,
+    destinationType: Camera.DestinationType.DATA_URL,
+    sourceType: Camera.PictureSourceType.PHOTOLIBRARY
+  });
+
+  function onSuccess(imageData)
+  {
+    var image = document.getElementById("testImage");
+    image.src = "data:image/jpeg;base64," + imageData;
+  }
+
+  function onFail(message)
+  {
+    pepupDialog('Error!', message);
+  }
 }
 
 app.initialize();
