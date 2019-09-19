@@ -1,5 +1,11 @@
+root {
+  --bg-color: #ffffff;
+  --highlight-color: #313131;
+  --width: 250px
+}
+
 * {
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection */
 }
 
 body {
@@ -25,7 +31,7 @@ body {
     left:50%;
     top:18%;
     height:50px;                   /* text area height */
-    width:250px;                   /* text area width */
+    width:var(--width);                   /* text area width */
     text-align:absolute;
     padding:170px 0px 0px 0px;     /* image height is 170px */
     margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
@@ -49,6 +55,15 @@ h1 {
     overflow:visible;
     padding:0px;
     text-align:center;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight:normal;
+  margin:0px;
+  overflow:visible;
+  padding:0px;
+  text-align:center;
 }
 
 .camera {
@@ -81,4 +96,17 @@ img {
 .event.received {
     background-color:#4B946A;
     display:none;
+}
+
+#caseFormPopup {
+  top: 0;
+  left: 0;
+  width: 71%;
+  height: 96%;
+  display: none;
+  position: fixed;
+  overflow: auto;
+  padding:10px 50px;
+  border:2px #ffffff;
+  background-color:#ffffff;
 }

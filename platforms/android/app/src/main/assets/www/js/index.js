@@ -3,13 +3,21 @@ var app = {
   initialize: function() {
     //initialize listeners
     document.addEventListener("deviceready", this.onDeviceReady.bind(this), false);
-    document.getElementById("submitButton").addEventListener("click", submitForm);
-    document.getElementById("clearButton").addEventListener("click", clearLocalStorage);
+    document.getElementById("submitCaseButton").addEventListener("click", openForm);
+    document.getElementById("submitFormButton").addEventListener("click", submitForm);
+    document.getElementById("clearStorageButton").addEventListener("click", clearLocalStorage);
     document.getElementById("cameraButton").addEventListener("click", openCamera);
     document.getElementById("galleryButton").addEventListener("click", openGallery);
+    document.getElementById("clearImagebutton").addEventListener("click", hideImage);
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
+
+    //Declares object to store qr code in
+    var qr_image;
+
+    //Stores current case id being operated on
+    var caseIDText;
   },
 
   onDeviceReady: function() {
@@ -32,8 +40,7 @@ var app = {
 function submitForm()
 {
   //Store form text
-  var caseIDText = document.getElementById("caseIDForm").value;
-  var caseInfoText = document.getElementById("caseInfoForm").value;
+  var caseInfoText = document.getElementById("caseInfoInput").value;
 
   //Temporarily use the caseID as a key for the case info
 
@@ -42,17 +49,23 @@ function submitForm()
     localStorage.setItem(caseIDText, caseInfoText);
     popupDialog(caseIDText, 'Successfully updated info');
   }
-  else
+}
+
+function openForm()
+{
+  caseIDText = document.getElementById("caseIDForm").value;
+
+  if (caseIDText != "")
   {
+    document.getElementById("caseFormName").innerHTML = caseIDText;
     var storedCaseInfo = localStorage.getItem(caseIDText);
+
     if (storedCaseInfo != null)
     {
-      popupDialog(caseIDText, storedCaseInfo);
+      document.getElementById("caseInfoInput").value = storedCaseInfo;
     }
-    else
-    {
-      popupDialog('Case ID Not Found', 'This case does not exist!');
-    }
+
+    document.getElementById("caseFormPopup").style.display = "block";
   }
 }
 
@@ -79,8 +92,8 @@ function openCamera()
 
   function onSuccess(imageData)
   {
-    var image = document.getElementById("testImage");
-    image.src = "data:image/jpeg;base64," + imageData;
+    qr_image = document.getElementById("qr_image_frame");
+    qr_image.src = "data:image/jpeg;base64," + imageData;
   }
 
   function onFail(message)
@@ -100,14 +113,21 @@ function openGallery()
 
   function onSuccess(imageData)
   {
-    var image = document.getElementById("testImage");
-    image.src = "data:image/jpeg;base64," + imageData;
+    qr_image = document.getElementById("qr_image_frame");
+    qr_image.src = "data:image/jpeg;base64," + imageData;
   }
 
   function onFail(message)
   {
     pepupDialog('Error!', message);
   }
+}
+
+//todo: does not keep img border
+function hideImage()
+{
+  qr_image = document.getElementById("qr_image_frame");
+  qr_image.style.visibility = 'hidden';
 }
 
 app.initialize();
