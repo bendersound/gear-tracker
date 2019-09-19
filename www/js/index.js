@@ -37,6 +37,17 @@ var app = {
   }
 };
 
+function popupDialog(title, message)
+{
+  var buttonName = "Ok";
+  navigator.notification.alert(message, alertCallback, title, buttonName);
+
+  function alertCallback()
+  {
+   console.log("Alert Dismissed");
+  }
+}
+
 function submitForm()
 {
   //Store form text
@@ -47,7 +58,7 @@ function submitForm()
   if (caseInfoText != "")
   {
     localStorage.setItem(caseIDText, caseInfoText);
-    popupDialog(caseIDText, 'Successfully updated info');
+    popupDialog('', "Successfully updated info");
   }
 }
 
@@ -69,15 +80,10 @@ function openForm()
   }
 }
 
-function popupDialog(title, message)
-{
-  alert(message);
-}
-
 function clearLocalStorage()
 {
   localStorage.clear();
-  popupDialog('', 'Local storage cleared');
+  popupDialog('', "Local storage cleared");
 }
 
 function openCamera()
@@ -119,7 +125,7 @@ function openGallery()
 
   function onFail(message)
   {
-    pepupDialog('Error!', message);
+    popupDialog('Error!', message);
   }
 }
 
