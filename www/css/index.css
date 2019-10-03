@@ -1,5 +1,5 @@
 root {
-  --bg-color: #ffffff;
+  --bg-color: #eeeeee;
   --highlight-color: #313131;
   --width: 250px
 }
@@ -110,12 +110,19 @@ img {
   overflow:auto;
   padding:10px 50px;
   border:2px #ffffff;
-  background-color:#ffffff;
+  background-color:#eeeeee;
+}
+
+input {
+  border: 1px, 0px, 0px, 0px;
+  width: 250px;
+  margin: 8px;
+  align: center;
 }
 
 textarea {
   width:250px;
   height:100px;
   align:center;
-  padding:auto;
+  margin: 8px;
 }
