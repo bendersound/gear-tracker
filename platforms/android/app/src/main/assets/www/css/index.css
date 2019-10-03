@@ -1,7 +1,8 @@
 root {
   --bg-color: #ffffff;
   --highlight-color: #313131;
-  --width: 250px
+  --width: 250px;
+  --max-width: 72%;
 }
 
 * {
@@ -26,7 +27,7 @@ body {
 
 /* Portrait layout (default) */
 .app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 170px */
+    /* background:url(../img/logo.png) no-repeat center top; 170px x 170px */
     position:absolute;             /* position in the center of the screen */
     left:50%;
     top:18%;
@@ -66,17 +67,19 @@ h2 {
   text-align:center;
 }
 
-.camera {
-  height: 350px;
-  width: 250px;
-}
-
 img {
   border: 1px solid #cccccc;
   border-radius: 3px;
   padding: 5px;
   width: 250px;
   height: 300px;
+}
+
+.bottomBar {
+  background-color: #eeeeee;
+  height: 100px;
+  width: 250px;
+  align: left;
 }
 
 .event {
@@ -88,25 +91,35 @@ img {
     padding:2px 0px;
 }
 
+/*for debugging*/
 .event.listening {
     background-color:#333333;
     display:block;
 }
 
+/*for debugging*/
 .event.received {
     background-color:#4B946A;
     display:none;
 }
 
 #caseFormPopup {
-  top: 0;
-  left: 0;
-  width: 71%;
-  height: 96%;
-  display: none;
-  position: fixed;
-  overflow: auto;
+  top:0;
+  left:0;
+  width: var(--max-width);
+  height:96%;
+  display:none;
+  position:fixed;
+  overflow:auto;
   padding:10px 50px;
   border:2px #ffffff;
   background-color:#ffffff;
+}
+
+textarea {
+  width:250px;
+  height:100px;
+  width: var(--max-width);
+  align:center;
+  padding:auto;
 }

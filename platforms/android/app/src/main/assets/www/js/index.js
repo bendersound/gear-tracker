@@ -6,9 +6,9 @@ var app = {
     document.getElementById("submitCaseButton").addEventListener("click", openForm);
     document.getElementById("submitFormButton").addEventListener("click", submitForm);
     document.getElementById("clearStorageButton").addEventListener("click", clearLocalStorage);
-    document.getElementById("cameraButton").addEventListener("click", openCamera);
+    document.getElementById("cameraButton").addEventListener("click", scanQR);
     document.getElementById("galleryButton").addEventListener("click", openGallery);
-    document.getElementById("clearImagebutton").addEventListener("click", hideImage);
+    //document.getElementById("clearImagebutton").addEventListener("click", hideImage);
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
@@ -22,6 +22,7 @@ var app = {
 
   onDeviceReady: function() {
       this.receivedEvent('deviceready');
+      openCamera();
   },
 
   // Update DOM on a Received Event
@@ -62,10 +63,8 @@ function submitForm()
   }
 }
 
-function openForm()
+function openForm(caseIdText)
 {
-  caseIDText = document.getElementById("caseIDForm").value;
-
   if (caseIDText != "")
   {
     document.getElementById("caseFormName").innerHTML = caseIDText;
@@ -80,12 +79,55 @@ function openForm()
   }
 }
 
+function openFormManual()
+{
+  caseIDText = document.getElementById("caseIDForm").value;
+  openForm(caseIDText);
+}
+
 function clearLocalStorage()
 {
   localStorage.clear();
   popupDialog('', "Local storage cleared");
 }
 
+function scanInput(error, content)
+{
+  if(error)
+  {
+    popupDialog('Error', "Scan unsuccesful")
+  }
+  else {
+    {
+      popupDialog('', content)
+      openForm(content);
+    }
+  }
+}
+
+function scanQR()
+{
+  QRScanner.pausePreview(function(status)
+  {
+    console.log(status);
+  })
+  QRScanner.scan(scanInput);
+  QRScanner.resumePreview(function(status)
+  {
+    console.log(status);
+  })
+}
+
+function openCamera()
+{
+  scanQR();
+  QRScanner.show(function(status)
+  {
+    console.log(status);
+  });
+}
+
+/*
 function openCamera()
 {
   navigator.camera.getPicture(onSuccess, onFail,
@@ -107,6 +149,7 @@ function openCamera()
     popupDialog('Error!', message);
   }
 }
+*/
 
 function openGallery()
 {

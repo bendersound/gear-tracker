@@ -6,7 +6,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <title>Hello World</title>
+    <title>Gear Tracker</title>
   </head>
   <body>
     <div class="app">
@@ -18,18 +18,19 @@
           <button id="closeCaseFormPopup">Cancel</button><br>
         </form>
       </div>
-      <div class="camera">
-        <img id="qr_image_frame"></img><br>
-        <button id="cameraButton">Camera</button>
-        <button id="galleryButton">Gallery</button>
-        <button id="clearImagebutton">Clear Image</button>
-      </div>
-      <div class="gearForm">
-        <form>
-          Case ID:&emsp;<input type="text" id="caseIDForm"><br>
-        </form>
-        <button id="submitCaseButton">Open</button>
-        <button id="clearStorageButton">Clear Storage</button><br><br><br>
+      <div class="bottomBar">
+        <div class="camera">
+          <button id="cameraButton">Scan</button>
+          <button id="galleryButton">Gallery</button>
+          <!--<button id="clearImagebutton">Clear Image</button>-->
+        </div>
+        <div class="gearForm">
+          <form>
+            Case ID:&emsp;<input type="text" id="caseIDForm"><br>
+          </form>
+          <button id="submitCaseButton">Open</button>
+          <button id="clearStorageButton">Clear Storage</button><br><br><br>
+        </div>
       </div>
     </div>
     <div id="deviceready">
