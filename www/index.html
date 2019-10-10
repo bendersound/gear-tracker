@@ -9,20 +9,20 @@
     <title>Gear Tracker</title>
   </head>
   <body>
-    <div class="header" id="appHeader">
-      <span id="headerText">Gear Tracker</span>
+    <div class="header">
+      <span class="headerText">Gear Tracker</span>
     </div>
     <div class="app">
-      <div id="caseFormPopup" style="overflow:hidden;">
-        <div class="caseFormPopupHeader">
-          <h2 id="caseFormName">Test</h2><br>
-        </div>
-        <form>
+      <div class="popup" id="caseFormPopup">
+        <div class="header">
+          <span class="headerText" id="caseFormName">Error</span>
+        <form class="popupForm">
           <textarea id="caseInfoInput" placeholder="New Case"></textarea><br>
           <button id="submitFormButton">Submit</button>
           <button id="closeCaseFormPopup">Cancel</button><br>
         </form>
       </div>
+    </div>
       <div class="bottomBar">
         <div class="camera">
           <button id="cameraButton">Scan</button>
