@@ -67,6 +67,19 @@ h2 {
   overflow: visible;
 }
 
+.header {
+  position: fixed;
+  height: 40px;
+  line-height: 40px;
+  color: white;
+  text-shadow: 0 0 2px black;
+}
+
+#headerText {
+  margin: 0 0 0 60px;
+  font-size: 22px;
+}
+
 .bottomBar {
   height: 70px;
   width: var(--content-width);
