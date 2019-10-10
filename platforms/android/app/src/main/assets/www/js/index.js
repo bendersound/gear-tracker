@@ -10,12 +10,6 @@ var app = {
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
-
-    //Declares object to store qr code in
-    var qr_image;
-
-    //Stores current case id being operated on
-    var caseIDText;
   },
 
   onDeviceReady: function() {
@@ -53,6 +47,7 @@ function popupDialog(title, message)
 //Store data on disk
 function submitForm()
 {
+  /*
   //Store form text
   var caseEntry = {
     make: document.getElementById("popupMake").value,
@@ -76,16 +71,16 @@ function submitForm()
     localStorage.setItem(caseIDText, jsonData);
     popupDialog('', "Successfully updated info");
   }
+  */
+  popupDialog('click');
 }
 
 
-function openForm()
+function openForm(caseID)
 {
-  caseIDText = document.getElementById("caseIDForm").value;
-
-  if (caseIDText != "")
+  if (caseID   != "")
   {
-    document.getElementById("caseFormName").innerHTML = caseIDText;
+    document.getElementById("caseFormName").innerHTML = caseID;
     var jsonData = localStorage.getItem(caseIDText);
 
     if (jsonData != "")
@@ -102,7 +97,7 @@ function openForm()
 
 function openFormManual()
 {
-  caseIDText = document.getElementById('caseIDForm').value;
+  var caseIDText = document.getElementById('caseIDForm').value;
   openForm(caseIDText);
 }
 
