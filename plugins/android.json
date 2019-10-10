@@ -10,11 +10,10 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.ben.geartracker"
     },
-    "cordova-plugin-camera": {
-      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+    "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.ben.geartracker"
     },
-    "cordova-plugin-dialogs": {
+    "cordova-plugin-qrscanner": {
       "PACKAGE_NAME": "com.ben.geartracker"
     }
   },
