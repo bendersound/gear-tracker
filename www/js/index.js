@@ -3,13 +3,14 @@ var app = {
   initialize: function() {
     //initialize listeners
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        document.getElementById('cameraButton').addEventListener('click', scanQR);
     document.getElementById('submitCaseButton').addEventListener('click', openFormManual);
     document.getElementById('submitFormButton').addEventListener('click', submitForm);
     document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
+    document.getElementById('cameraButton').addEventListener('click', scanQR);
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
+    var caseIDText;
   },
 
   onDeviceReady: function() {
@@ -47,57 +48,38 @@ function popupDialog(title, message)
 //Store data on disk
 function submitForm()
 {
-  /*
   //Store form text
-  var caseEntry = {
-    make: document.getElementById("popupMake").value,
-    model: document.getElementById("popupModel").value,
-    amount: document.getElementById("popupAmount").value,
-    date: document.getElementById("popupDate").value,
-    other: document.getElementById("caseInfoInput").value,
-
-    toString : function()
-    {
-      return this.amount.toString() + "x " + this.make + " " + this.model;
-    }
-  };
-
-  var newCase = {id: caseIDText, entries: [caseEntry]};
-  var jsonData = JSON.stringify(newCase);
+  const caseID = document.getElementById('caseFormName').value;
+  const caseInfoText = document.getElementById('caseInfoInput').value;
   //Temporarily use the caseID as a key for the case info
-  //popupDialog('', caseEntry.toString());
-  if (jsonData != "")
+
+  if (caseInfoText != '')
   {
-    localStorage.setItem(caseIDText, jsonData);
-    popupDialog('', "Successfully updated info");
+    localStorage.setItem(caseIDText, caseInfoText);
+    popupDialog('', 'Successfully updated info');
   }
-  */
-  popupDialog('click');
 }
 
-
+//open form for viewing
+//param caseIDText used for passing in case ID
 function openForm(caseID)
 {
-  if (caseID != "")
-  {
-    document.getElementById("caseFormName").innerHTML = caseID;
-    var jsonData = localStorage.getItem(caseIDText);
-
-    if (jsonData != "")
+  //if (caseID != '')
+  //{
+    document.getElementById('caseFormPopup').style.display = 'block';
+    document.getElementById('caseFormName').innerHTML = caseID;
+    const storedCaseInfo = localStorage.getItem(caseID);
+    if (storedCaseInfo)
     {
-      //var case = $.parseJSON('{ "name":"John", "age":30, "city":"New York"}');
-      //popupDialog("", case.name);
-      //var case = JSON.parse(jsonData);
-      //var entry = case.entries[0];
-      //document.getElementById("popupMake").value = entry.make;
-      document.getElementById("caseInfoInput").value = jsonData;
+      document.getElementById('caseInfoInput').value = storedCaseInfo;
     }
-  }
+    caseIDText = caseID;
+  //}
 }
 
 function openFormManual()
 {
-  var caseIDText = document.getElementById('caseIDForm').value;
+  const caseIDText = document.getElementById('caseIDForm').value;
   openForm(caseIDText);
 }
 
