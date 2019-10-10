@@ -2,13 +2,11 @@ var app = {
   // Application Constructor
   initialize: function() {
     //initialize listeners
-    document.addEventListener("deviceready", this.onDeviceReady.bind(this), false);
-    document.getElementById("submitCaseButton").addEventListener("click", openForm);
-    document.getElementById("submitFormButton").addEventListener("click", submitForm);
-    document.getElementById("clearStorageButton").addEventListener("click", clearLocalStorage);
-    document.getElementById("cameraButton").addEventListener("click", scanQR);
-    document.getElementById("galleryButton").addEventListener("click", openGallery);
-    //document.getElementById("clearImagebutton").addEventListener("click", hideImage);
+    document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    document.getElementById('submitCaseButton').addEventListener('click', openFormManual);
+    document.getElementById('submitFormButton').addEventListener('click', submitForm);
+    document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
+    document.getElementById('cameraButton').addEventListener('click', scanQR);
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
@@ -21,11 +19,12 @@ var app = {
   },
 
   onDeviceReady: function() {
-      this.receivedEvent('deviceready');
+      //this.receivedEvent('deviceready');
       openCamera();
   },
 
   // Update DOM on a Received Event
+  /*
   receivedEvent: function(id) {
     var parentElement = document.getElementById(id);
     var listeningElement = parentElement.querySelector('.listening');
@@ -36,147 +35,113 @@ var app = {
 
     console.log('Received Event: ' + id);
   }
+  */
 };
 
+// Popup dialog for testing
 function popupDialog(title, message)
 {
-  var buttonName = "Ok";
+  var buttonName = 'Ok';
   navigator.notification.alert(message, alertCallback, title, buttonName);
 
   function alertCallback()
   {
-   console.log("Alert Dismissed");
+   console.log('Alert Dismissed');
   }
 }
 
+//Store data on disk
 function submitForm()
 {
   //Store form text
-  var caseInfoText = document.getElementById("caseInfoInput").value;
+  var caseInfoText = document.getElementById('caseInfoInput').value;
 
   //Temporarily use the caseID as a key for the case info
 
-  if (caseInfoText != "")
+  if (caseInfoText != '')
   {
     localStorage.setItem(caseIDText, caseInfoText);
-    popupDialog('', "Successfully updated info");
+    popupDialog('', 'Successfully updated info');
   }
 }
 
+//open form for viewing
+//param caseIDText used for passing in case ID
 function openForm(caseIdText)
 {
-  if (caseIDText != "")
+  if (caseIDText != '')
   {
-    document.getElementById("caseFormName").innerHTML = caseIDText;
+    document.getElementById('caseFormPopup').style.display = 'block';
+    document.getElementById('caseFormName').innerHTML = caseIDText;
     var storedCaseInfo = localStorage.getItem(caseIDText);
-
-    if (storedCaseInfo != null)
+    if (storedCaseInfo)
     {
-      document.getElementById("caseInfoInput").value = storedCaseInfo;
+      document.getElementById('caseInfoInput').value = storedCaseInfo;
     }
-
-    document.getElementById("caseFormPopup").style.display = "block";
   }
 }
 
 function openFormManual()
 {
-  caseIDText = document.getElementById("caseIDForm").value;
+  caseIDText = document.getElementById('caseIDForm').value;
   openForm(caseIDText);
 }
 
+//clear data on disk
 function clearLocalStorage()
 {
   localStorage.clear();
-  popupDialog('', "Local storage cleared");
+  popupDialog('', 'Local storage cleared');
 }
 
-function scanInput(error, content)
-{
-  if(error)
-  {
-    popupDialog('Error', "Scan unsuccesful")
-  }
-  else {
-    {
-      popupDialog('', content)
-      openForm(content);
-    }
-  }
-}
-
+//pause the preview so users know a code is being scanned
 function scanQR()
 {
+  var scanCallback = function(error, content)
+  {
+    if(error)
+    {
+      popupDialog('Error', 'Scan unsuccesful')
+    }
+    else
+    {
+      {
+        openForm(content);
+      }
+    }
+  }
+
   QRScanner.pausePreview(function(status)
   {
     console.log(status);
   })
-  QRScanner.scan(scanInput);
   QRScanner.resumePreview(function(status)
   {
     console.log(status);
   })
+  QRScanner.scan(scanCallback);
 }
 
+//Initialize and show qr code scanner
 function openCamera()
 {
-  scanQR();
+  var prepareCallback = function(err, status)
+  {
+    if(error)
+    {
+      console.error(error._message);
+    }
+    else
+    {
+      console.log(status);
+    }
+  };
+
+  QRScanner.prepare(prepareCallback);
   QRScanner.show(function(status)
   {
     console.log(status);
   });
-}
-
-/*
-function openCamera()
-{
-  navigator.camera.getPicture(onSuccess, onFail,
-  {
-    quality: 50,
-    destinationType: Camera.DestinationType.DATA_URL,
-    sourceType: Camera.PictureSourceType.CAMERA,
-    cameraDirection: Camera.BACK
-  });
-
-  function onSuccess(imageData)
-  {
-    qr_image = document.getElementById("qr_image_frame");
-    qr_image.src = "data:image/jpeg;base64," + imageData;
-  }
-
-  function onFail(message)
-  {
-    popupDialog('Error!', message);
-  }
-}
-*/
-
-function openGallery()
-{
-  navigator.camera.getPicture(onSuccess, onFail,
-  {
-    quality: 50,
-    destinationType: Camera.DestinationType.DATA_URL,
-    sourceType: Camera.PictureSourceType.PHOTOLIBRARY
-  });
-
-  function onSuccess(imageData)
-  {
-    qr_image = document.getElementById("qr_image_frame");
-    qr_image.src = "data:image/jpeg;base64," + imageData;
-  }
-
-  function onFail(message)
-  {
-    popupDialog('Error!', message);
-  }
-}
-
-//todo: does not keep img border
-function hideImage()
-{
-  qr_image = document.getElementById("qr_image_frame");
-  qr_image.style.visibility = 'hidden';
 }
 
 app.initialize();

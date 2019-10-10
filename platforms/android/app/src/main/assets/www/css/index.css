@@ -30,7 +30,7 @@ body {
     /* background:url(../img/logo.png) no-repeat center top; 170px x 170px */
     position:absolute;             /* position in the center of the screen */
     left:50%;
-    top:18%;
+    top:70%;
     height:50px;                   /* text area height */
     width:var(--width);                   /* text area width */
     text-align:absolute;
@@ -76,9 +76,9 @@ img {
 }
 
 .bottomBar {
-  background-color: #eeeeee;
-  height: 100px;
-  width: 250px;
+  text-align: center;
+  height: 70px;
+  width: 200px;
   align: left;
 }
 
@@ -91,23 +91,13 @@ img {
     padding:2px 0px;
 }
 
-/*for debugging*/
-.event.listening {
-    background-color:#333333;
-    display:block;
-}
-
-/*for debugging*/
-.event.received {
-    background-color:#4B946A;
-    display:none;
-}
-
 #caseFormPopup {
   top:0;
   left:0;
   width: var(--max-width);
-  height:96%;
+  height:97%;
+  width: 73%;
+  text-align:center;
   display:none;
   position:fixed;
   overflow:auto;
@@ -117,9 +107,8 @@ img {
 }
 
 textarea {
-  width:250px;
+  width:350px;
   height:100px;
   width: var(--max-width);
-  align:center;
   padding:auto;
 }
