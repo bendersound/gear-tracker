@@ -81,7 +81,9 @@ function submitForm()
 
 function openForm()
 {
-  if (caseIDText != '')
+  caseIDText = document.getElementById("caseIDForm").value;
+
+  if (caseIDText != "")
   {
     document.getElementById("caseFormName").innerHTML = caseIDText;
     var jsonData = localStorage.getItem(caseIDText);
@@ -95,7 +97,7 @@ function openForm()
       //document.getElementById("popupMake").value = entry.make;
       document.getElementById("caseInfoInput").value = jsonData;
     }
-  }
+  //}
 }
 
 function openFormManual()

@@ -114,13 +114,6 @@ input {
 }
 
 textarea {
-  width:250px;
-  height:100px;
-  align:center;
-  margin: 8px;
-}
-
-textarea {
   width:350px;
   height:100px;
   width: var(--max-width);
