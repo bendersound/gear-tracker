@@ -3,7 +3,7 @@ var app = {
   initialize: function() {
     //initialize listeners
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    document.getElementById('submitCaseButton').addEventListener('click', openFormManual);
+    document.getElementById('submitCaseButton').addEventListener('click', openCaseFormManual);
     document.getElementById('submitFormButton').addEventListener('click', submitForm);
     document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
     document.getElementById('cameraButton').addEventListener('click', scanQR);
@@ -62,7 +62,7 @@ function submitForm()
 
 //open form for viewing
 //param caseIDText used for passing in case ID
-function openForm(caseID)
+function openCaseForm(caseID)
 {
   //if (caseID != '')
   //{
@@ -77,10 +77,11 @@ function openForm(caseID)
   //}
 }
 
-function openFormManual()
+//get case id from field on homescreen and open for editting
+function openCaseFormManual()
 {
   const caseIDText = document.getElementById('caseIDForm').value;
-  openForm(caseIDText);
+  openCaseForm(caseIDText);
 }
 
 //clear data on disk
