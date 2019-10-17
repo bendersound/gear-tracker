@@ -3,24 +3,47 @@ var app = {
   initialize: function() {
     //initialize listeners
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    document.addEventListener('pause', this.onPause.bind(this), false);
+    document.addEventListener('resume', this.onResume.bind(this), false);
     document.getElementById('submitCaseButton').addEventListener('click', openCaseFormManual);
     document.getElementById('submitFormButton').addEventListener('click', submitForm);
     document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
     document.getElementById('cameraButton').addEventListener('click', scanQR);
 
     //Initializes disk storage object
-    var localStorage = window.localStorage;
+    var localStorage;
     var caseIDText;
+
+    var caseEntries;
   },
 
+    // Handle device ready
   onDeviceReady: function() {
       //this.receivedEvent('deviceready');
       openCamera();
+      localStorage = window.localStorage;
+      caseEntries = localStorage.getItem('caseEntries').valueOf();
+      if(!caseEntries)
+      {
+        caseEntries = 0;
+      }
   },
+
+  // Handle pause
+  onPause: function()
+  {
+    //keep track of number of cases we are working with
+    localStorage.setItem('caseEntries', caseEntries.toString());
+  },
+
+  // Handle resume
+  onResume: function()
+  {
+  }
 
   // Update DOM on a Received Event
   /*
-  receivedEvent: function(id) {
+  , receivedEvent: function(id) {
     var parentElement = document.getElementById(id);
     var listeningElement = parentElement.querySelector('.listening');
     var receivedElement = parentElement.querySelector('.received');
@@ -57,22 +80,41 @@ function submitForm()
   {
     localStorage.setItem(caseIDText, caseInfoText);
     popupDialog('', 'Successfully updated info');
+    popupDialog('Number of Case Entries', caseEntries);
   }
+}
+
+function openGearEntry()
+{
+  var gearEntry = {
+    make: '',
+    model: '',
+    amount: '',
+    datePurchased: '',
+    otherInfo: ''
+  };
 }
 
 //open form for viewing
 //param caseIDText used for passing in case ID
 function openCaseForm(caseID)
 {
-  //if (caseID != '')
+  var caseEntry = {
+    name: '',
+    gearEntries: [],
+    storageLocation: '',
+    dateLastUsed: '',
+    otherInfo: ''
+  };
+  //if (caseID)
   //{
-    document.getElementById('caseFormPopup').style.display = 'block';
-    document.getElementById('caseFormName').innerHTML = caseID;
     const storedCaseInfo = localStorage.getItem(caseID);
     if (storedCaseInfo)
     {
       document.getElementById('caseInfoInput').value = storedCaseInfo;
     }
+    document.getElementById('caseFormName').innerHTML = caseID;
+    document.getElementById('caseFormPopup').style.display = 'block';
     caseIDText = caseID;
   //}
 }
