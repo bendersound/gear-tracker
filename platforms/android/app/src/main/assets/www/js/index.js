@@ -84,21 +84,39 @@ function submitForm()
   }
 }
 
+function openGearEntry()
+{
+  var gearEntry = {
+    make: '',
+    model: '',
+    amount: '',
+    datePurchased: '',
+    otherInfo: ''
+  };
+}
+
 //open form for viewing
 //param caseIDText used for passing in case ID
 function openCaseForm(caseID)
 {
-  if (caseID)
-  {
-    document.getElementById('caseFormPopup').style.display = 'block';
-    document.getElementById('caseFormName').innerHTML = caseID;
+  var caseEntry = {
+    name: '',
+    gearEntries: [],
+    storageLocation: '',
+    dateLastUsed: '',
+    otherInfo: ''
+  };
+  //if (caseID)
+  //{
     const storedCaseInfo = localStorage.getItem(caseID);
     if (storedCaseInfo)
     {
       document.getElementById('caseInfoInput').value = storedCaseInfo;
     }
+    document.getElementById('caseFormName').innerHTML = caseID;
+    document.getElementById('caseFormPopup').style.display = 'block';
     caseIDText = caseID;
-  }
+  //}
 }
 
 //get case id from field on homescreen and open for editting
