@@ -13,10 +13,19 @@
       <span class="headerText">Gear Tracker</span>
     </div>
     <div class="app">
+      <div class="popup" id="leftPanel">
+        <div class="header">
+          <span class="headerText" id="caseListName">Cases</span>
+        </div>
+        <table class = "popupBody" id="caseList">
+        <table>
+        <button id="closeCaseFormPopup">Cancel</button>
+        <button id="clearStorageButton">Clear Storage</button>
+      </div>
       <div class="popup" id="caseFormPopup">
         <div class="header">
           <span class="headerText" id="caseFormName">Error</span>
-          <form class="popupForm">
+          <form class="popupBody">
             <textarea id="caseInfoInput" placeholder="New Case"></textarea><br>
             <button id="submitFormButton">Submit</button>
             <button id="closeCaseFormPopup">Cancel</button><br>
@@ -33,7 +42,6 @@
             <input type="text" id="caseIDForm" placeholder="Case ID"><br>
           </form>
           <button id="submitCaseButton">Open</button>
-          <button id="clearStorageButton">Clear Storage</button><br><br><br>
         </div>
       </div>
     </div>
