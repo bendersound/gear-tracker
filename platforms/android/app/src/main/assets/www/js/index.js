@@ -18,37 +18,33 @@ var app = {
 
   onDeviceReady: function()
   {
-      storeTestCases();
-
+      //this.receivedEvent('deviceready');
       openCamera();
       caseList = openCases();
       var listParent = document.getElementById('caseList');
-      renderCaseList(listParent);
+      renderCaseList(caseList, listParent);
       popupDialog('Test', 'Success');
   },
 
   onPause: function()
   {
-    storeCases();
+    localStorage.setItem('numberOfCases', numberOfCases.toString());
   }
+
+  // Update DOM on a Received Event
+  /*
+  receivedEvent: function(id) {
+    var parentElement = document.getElementById(id);
+    var listeningElement = parentElement.querySelector('.listening');
+    var receivedElement = parentElement.querySelector('.received');
+
+    listeningElement.setAttribute('style', 'display:none;');
+    receivedElement.setAttribute('style', 'display:block;');
+
+    console.log('Received Event: ' + id);
+  }
+  */
 };
-
-/*
-// TODO: Testing
-*/
-function storeTestCases()
-{
-  var testCase1 = {id:'Test 1', equipment_count:1};
-  var testCase2 = {id:'Test 2', equipment_count:2};
-  var testCase3 = {id:'Test 3', equipment_count:3};
-
-  caseList = [testCase1, testCase2, testCase3];
-  numberOfCases = 3;
-
-  clearLocalStorage();
-  storeCases();
-  clearGlobalParamters();
-}
 
 // Popup dialog for testing
 function popupDialog(title, message)
@@ -102,19 +98,11 @@ function openCaseFormManual()
   openCaseForm(caseIDText);
 }
 
-//
-clearGlobalParamters()
-{
-  numberOfCases = 0;
-  cases = [];
-  caseIDText = '';
-}
-
 //clear data on disk
 function clearLocalStorage()
 {
   localStorage.clear();
-  clearGlobalParamters();
+  numberOfCases = 0;
   popupDialog('', 'Local storage cleared');
 }
 
@@ -168,14 +156,14 @@ function openCamera()
   });
 }
 
-function renderCaseList(caseListParent)
+function renderCaseList(cases, caseListParent)
 {
   var newCaseListing;
   var tableRow;
   var idCell;
   var equipCell;
 
-  for (i = 0; i < caseList.length; i++)
+  for (i = 0; i < cases.length; i++)
   {
     //cases.push(localStorage.getItem(i.toString()));
     tableRow = document.createElement("tr");
@@ -183,8 +171,8 @@ function renderCaseList(caseListParent)
     idCell = document.createElement("td");
     equipCell = document.createElement("td");
 
-    idCell.innerHTML = caseList[i].id;
-    equipCell.innerHTML = caseList[i].equipment_count;
+    idCell.innerHTML = cases[i].id;
+    equipCell.innerHTML = cases[i].equipment_count;
 
     tableRow.appendChild(idCell);
     tableRow.appendChild(equipCell);
@@ -196,34 +184,25 @@ function renderCaseList(caseListParent)
 
 function openCases()
 {
-  numberOfCases = localStorage.getItem('numberOfCases');
-  if (!numberOfCases)
+  /*
+  tmpNumCases = localStorage.getItem('numberOfCases');
+  if (tmpNumCases != null)
+  {
+    numberOfCases = parseInt(tmpNumCases);
+  }
+  else
   {
     numberOfCases = 0;
   }
+  */
 
-  var cases = [];
-  var caseListingStr = '';
-  var caseListingJSON = {};
+  var testCase1 = {id:'Test 1', equipment_count:1}
+  var testCase2 = {id:'Test 2', equipment_count:2}
+  var testCase3 = {id:'Test 3', equipment_count:3}
 
-  for (i = 0; i < numberOfCases; i++)
-  {
-    caseListingStr = localStorage.getItem('case' + i.toString());
-    caseListingJSON = JSON.parse(caseListingStr);
-    cases.push(caseListing);
-  }
-
+  cases = [testCase1, testCase2, testCase3];
   return cases;
-}
 
-function storeCases()
-{
-  localStorage.setItem('number_of_cases', numCases.toString());
-
-  for (i = 0; i < caseList.length; i++)
-  {
-    localStorage.setItem('case' + i.toString(), caseList[i].toString());
-  }
 }
 
 app.initialize();
