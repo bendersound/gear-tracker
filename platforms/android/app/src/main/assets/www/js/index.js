@@ -8,6 +8,7 @@ var app = {
     document.getElementById('submitFormButton').addEventListener('click', submitForm);
     document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
     document.getElementById('cameraButton').addEventListener('click', scanQR);
+    document.getElementById('openCaseList').addEventListener('click', openCaseList);
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
@@ -23,7 +24,7 @@ var app = {
       caseList = openCases();
       var listParent = document.getElementById('caseList');
       renderCaseList(caseList, listParent);
-      popupDialog('Test', 'Success');
+      //popupDialog('Test', 'Success');
   },
 
   onPause: function()
@@ -62,14 +63,13 @@ function popupDialog(title, message)
 function submitForm()
 {
   //Store form text
-  const caseID = document.getElementById('caseFormName').value;
-  const caseInfoText = document.getElementById('caseInfoInput').value;
-  //Temporarily use the caseID as a key for the case info
+  caseInfoText = document.getElementById('caseInfoInput').value;
 
-  popupDialog('Test', this.numberOfCases.toString());
+  //popupDialog('Test', this.numberOfCases.toString());
   if (caseInfoText != '')
   {
-    localStorage.setItem(caseIDText, caseInfoText);
+    //localStorage.setItem(caseIDText, caseInfoText);
+    caseList[caseIDText].info = caseInfoText;
     popupDialog('', 'Successfully updated info');
   }
 }
@@ -81,12 +81,8 @@ function openCaseForm(caseID)
   //if (caseID != '')
   //{
     document.getElementById('caseFormPopup').style.display = 'block';
-    document.getElementById('caseFormName').innerHTML = caseID;
-    const storedCaseInfo = localStorage.getItem(caseID);
-    if (storedCaseInfo)
-    {
-      document.getElementById('caseInfoInput').value = storedCaseInfo;
-    }
+    document.getElementById('caseFormName').innerHTML = caseList[caseID].name;
+    document.getElementById('caseInfoInput').value = caseList[caseID].info;
     caseIDText = caseID;
   //}
 }
@@ -102,6 +98,9 @@ function openCaseFormManual()
 function clearLocalStorage()
 {
   localStorage.clear();
+  var listParent = document.getElementById('caseList');
+  var cases = [{name:'No cases here!', equipment_count:''}]
+  renderCaseList(cases, listParent);
   numberOfCases = 0;
   popupDialog('', 'Local storage cleared');
 }
@@ -158,6 +157,7 @@ function openCamera()
 
 function renderCaseList(cases, caseListParent)
 {
+  var newCaseList = document.createElement('tbody');
   var newCaseListing;
   var tableRow;
   var idCell;
@@ -167,19 +167,19 @@ function renderCaseList(cases, caseListParent)
   {
     //cases.push(localStorage.getItem(i.toString()));
     tableRow = document.createElement("tr");
+    tableRow.setAttribute('data-href', 'javascript:openCaseForm(' + cases[i].name + ');');
 
     idCell = document.createElement("td");
     equipCell = document.createElement("td");
 
-    idCell.innerHTML = cases[i].id;
-    equipCell.innerHTML = cases[i].equipment_count;
+    idCell.innerHTML = cases[i].name;
+    equipCell.innerHTML = i;
 
     tableRow.appendChild(idCell);
     tableRow.appendChild(equipCell);
-    caseListParent.appendChild(tableRow);
+    newCaseList.appendChild(tableRow);
   }
-  //// TODO: for testing only
-  document.getElementById('leftPanel').style.display = 'block';
+  caseListParent.replaceChild(newCaseList, caseListParent.childNodes[0])
 }
 
 function openCases()
@@ -196,13 +196,20 @@ function openCases()
   }
   */
 
-  var testCase1 = {id:'Test 1', equipment_count:1}
-  var testCase2 = {id:'Test 2', equipment_count:2}
-  var testCase3 = {id:'Test 3', equipment_count:3}
+  var testCase1 = {name:'QSC 1', info:'1x QSC K10.2', equipment_count:1}
+  var testCase2 = {name:'QSC 2', info:'1x QSC K10.2', equipment_count:1}
+  var testCase3 = {name:'Cables', info:'14x GLS XLR Cable', equipment_count:14}
+  var testCase4 = {name:'Megapars 1', info:'8x ADJ Megapar RGBUV', equipment_count:8}
+  var testCase5 = {name:'Megapars 2', info:'8x ADJ Megapar RGBUV', equipment_count:8}
 
-  cases = [testCase1, testCase2, testCase3];
+  var cases = [testCase1, testCase2, testCase3, testCase4, testCase5];
   return cases;
 
+}
+
+function openCaseList()
+{
+  document.getElementById('leftPanel').style.display = 'block';
 }
 
 app.initialize();

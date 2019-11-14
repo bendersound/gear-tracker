@@ -13,35 +13,43 @@
       <span class="headerText">Gear Tracker</span>
     </div>
     <div class="app">
+      <div class="bottomBar">
+        <button id="cameraButton">Scan</button>
+        <button id="openCaseList">Search</button>
+      </div>
       <div class="popup" id="leftPanel">
         <div class="header">
           <span class="headerText" id="caseListName">Cases</span>
         </div>
-        <table class = "popupBody" id="caseList">
-        <table>
-        <button id="closeCaseFormPopup">Cancel</button>
-        <button id="clearStorageButton">Clear Storage</button>
+        <div class="popupBody">
+          <table id="caseList">
+            <!--<thead>
+              <trow>
+                <th>Name</td>
+                <th>Items</td>
+              </trow>
+            </thead>-->
+            <tbody>
+            </tbody>
+          </table>
+          <form>
+            <input type="number" id="caseIDForm" placeholder="Case ID">
+          </form>
+          <button id="submitCaseButton">Open</button><br><br><br>
+          <button id="closeCaseFormPopup">Cancel</button>
+          <button id="clearStorageButton">Clear Storage</button>
+        </div>
       </div>
       <div class="popup" id="caseFormPopup">
         <div class="header">
-          <span class="headerText" id="caseFormName">Error</span>
-          <form class="popupBody">
+          <span class="headerText" id="caseFormName">New Case</span>
+        </div>
+        <div class="popupBody">
+          <form>
             <textarea id="caseInfoInput" placeholder="New Case"></textarea><br>
             <button id="submitFormButton">Submit</button>
             <button id="closeCaseFormPopup">Cancel</button><br>
           </form>
-      </div>
-    </div>
-      <div class="bottomBar">
-        <div class="camera">
-          <button id="cameraButton">Scan</button>
-        </div>
-        <br>
-        <div class="gearForm">
-          <form>
-            <input type="text" id="caseIDForm" placeholder="Case ID"><br>
-          </form>
-          <button id="submitCaseButton">Open</button>
         </div>
       </div>
     </div>
