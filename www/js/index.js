@@ -1,50 +1,61 @@
 var app = {
   // Application Constructor
   initialize: function() {
-    //initialize listeners
+    //Device listeners
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    document.addEventListener(' pause', this.onPause.bind(this), false);
-    document.getElementById('submitCaseButton').addEventListener('click', openCaseFormManual);
-    document.getElementById('submitFormButton').addEventListener('click', submitForm);
-    document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
+    document.addEventListener('pause', this.onPause.bind(this), false);
+    document.addEventListener('backbutton', this.onBackKeyDown, false);
+
+    //Home screen listeners
     document.getElementById('cameraButton').addEventListener('click', scanQR);
     document.getElementById('openCaseList').addEventListener('click', openCaseList);
 
+    //Case list screen listeners
+    document.getElementById('submitCaseButton').addEventListener('click', openCaseFormManual);
+    document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
+
+    //Case form screen listeners
+    document.getElementById('submitFormButton').addEventListener('click', submitForm);
+
     //Initializes disk storage object
     var localStorage = window.localStorage;
+    var caseList = [];
     var numberOfCases;
-    var caseList;
     var caseIDText;
+    var curScreen = 0;
   },
 
   onDeviceReady: function()
   {
       //this.receivedEvent('deviceready');
       openCamera();
-      caseList = openCases();
+      caseList = openTestCases2();
       var listParent = document.getElementById('caseList');
-      renderCaseList(caseList, listParent);
+      var header = 0;
+      renderCaseList(caseList, header, listParent, 0);
       //popupDialog('Test', 'Success');
   },
 
   onPause: function()
   {
     localStorage.setItem('numberOfCases', numberOfCases.toString());
+  },
+
+  onBackKeyDown: function(e)
+  {
+    if (curScreen == 0)
+    {
+      navigator.app.exitApp();
+    }
+    else if (curScreen == 1)
+    {
+      closeCaseList();
+    }
+    else if (curScreen == 2)
+    {
+      closeCaseForm();
+    }
   }
-
-  // Update DOM on a Received Event
-  /*
-  receivedEvent: function(id) {
-    var parentElement = document.getElementById(id);
-    var listeningElement = parentElement.querySelector('.listening');
-    var receivedElement = parentElement.querySelector('.received');
-
-    listeningElement.setAttribute('style', 'display:none;');
-    receivedElement.setAttribute('style', 'display:block;');
-
-    console.log('Received Event: ' + id);
-  }
-  */
 };
 
 // Popup dialog for testing
@@ -59,52 +70,6 @@ function popupDialog(title, message)
   }
 }
 
-//Store data on disk
-function submitForm()
-{
-  //Store form text
-  caseInfoText = document.getElementById('caseInfoInput').value;
-
-  //popupDialog('Test', this.numberOfCases.toString());
-  if (caseInfoText != '')
-  {
-    //localStorage.setItem(caseIDText, caseInfoText);
-    caseList[caseIDText].info = caseInfoText;
-    popupDialog('', 'Successfully updated info');
-  }
-}
-
-//open form for viewing
-//param caseIDText used for passing in case ID
-function openCaseForm(caseID)
-{
-  //if (caseID != '')
-  //{
-    document.getElementById('caseFormPopup').style.display = 'block';
-    document.getElementById('caseFormName').innerHTML = caseList[caseID].name;
-    document.getElementById('caseInfoInput').value = caseList[caseID].info;
-    caseIDText = caseID;
-  //}
-}
-
-//get case id from field on homescreen and open for editting
-function openCaseFormManual()
-{
-  const caseIDText = document.getElementById('caseIDForm').value;
-  openCaseForm(caseIDText);
-}
-
-//clear data on disk
-function clearLocalStorage()
-{
-  localStorage.clear();
-  var listParent = document.getElementById('caseList');
-  var cases = [{name:'No cases here!', equipment_count:''}]
-  renderCaseList(cases, listParent);
-  numberOfCases = 0;
-  popupDialog('', 'Local storage cleared');
-}
-
 //pause the preview so users know a code is being scanned
 function scanQR()
 {
@@ -117,7 +82,7 @@ function scanQR()
     else
     {
       {
-        openForm(content);
+        openCaseForm(content);
       }
     }
   }
@@ -155,33 +120,103 @@ function openCamera()
   });
 }
 
-function renderCaseList(cases, caseListParent)
+//Store data on disk
+function submitForm()
 {
-  var newCaseList = document.createElement('tbody');
-  var newCaseListing;
-  var tableRow;
-  var idCell;
-  var equipCell;
+  //Store form text
+  caseInfoText = document.getElementById('caseInfoInput').value;
 
-  for (i = 0; i < cases.length; i++)
+  //popupDialog('Test', this.numberOfCases.toString());
+  if (caseInfoText != '')
   {
-    //cases.push(localStorage.getItem(i.toString()));
-    tableRow = document.createElement("tr");
-    tableRow.setAttribute('data-href', 'javascript:openCaseForm(' + cases[i].name + ');');
-
-    idCell = document.createElement("td");
-    equipCell = document.createElement("td");
-
-    idCell.innerHTML = cases[i].name;
-    equipCell.innerHTML = i;
-
-    tableRow.appendChild(idCell);
-    tableRow.appendChild(equipCell);
-    newCaseList.appendChild(tableRow);
+    //localStorage.setItem(caseIDText, caseInfoText);
+    caseList[caseIDText].info = 'poo'; //caseInfoText;
+    popupDialog('', 'Successfully updated info');
   }
-  caseListParent.replaceChild(newCaseList, caseListParent.childNodes[0])
 }
 
+//open form for viewing
+//param caseIDText used for passing in case ID
+function openCaseForm(caseID)
+{
+  //if (caseID != '')
+  //{
+    document.getElementById('caseFormName').value = caseList[caseID].name;
+    document.getElementById('caseInfoInput').value = caseList[caseID].info;
+    caseIDText = caseID;
+  //}
+  document.getElementById('caseFormPopup').style.display = 'block';
+  curScreen = 2;
+}
+
+//get case id from field on homescreen and open for editting
+function openCaseFormManual()
+{
+  const caseIDText = document.getElementById('caseIDForm').value;
+  openCaseForm(caseIDText);
+}
+
+function closeCaseForm()
+{
+  document.getElementById('caseFormPopup').style.display = 'none';
+  curScreen = 1;
+}
+
+//clear data on disk
+function clearLocalStorage()
+{
+  localStorage.clear();
+  var listParent = document.getElementById('caseList');
+  var cases = [{name:'No cases here!', equipment_count:''}]
+  renderCaseList(cases, listParent);
+  numberOfCases = 0;
+  popupDialog('', 'Local storage cleared');
+}
+
+function renderList(items, header, parent, childIndex)
+{
+  var tBody = document.createElement("tbody");
+  var tRow;
+  var newCell;
+  var i = 0;
+  for (i = 0; i < items.length; i++)
+  {
+    tRow = document.createElement("tr");
+    //tableRow.setAttribute('data-href', 'javascript:openCaseForm(' + items[i].name + ');');
+
+    //for each (cellValue in items[i])
+    //{
+      newCell = document.createElement("td");
+      //newCell.innerHTML = cellValue;
+      newCell.innerHTML = i;
+      tRow.appendChild(newCell);
+    //}
+    tBody.appendChild(tRow);
+  }
+  parent.replaceChild(tBody, parent.childNodes[childIndex])
+}
+
+function openTestCases1()
+{
+  var testCase1 = {name:'QSC 1', info:'1x QSC K10.2', equipment_count:1}
+  var testCase2 = {name:'QSC 2', info:'1x QSC K10.2', equipment_count:1}
+  var testCase3 = {name:'Cables', info:'14x GLS XLR Cable', equipment_count:14}
+  var testCase4 = {name:'Megapars 1', info:'8x ADJ Megapar RGBUV', equipment_count:8}
+  var testCase5 = {name:'Megapars 2', info:'8x ADJ Megapar RGBUV', equipment_count:8}
+
+  var cases = [testCase1, testCase2, testCase3, testCase4, testCase5];
+}
+
+function openTestCases2()
+{
+  var testCase1 = {blah:'a', boo:1}
+  var testCase1 = {blah:'b', boo:2}
+  var testCase1 = {blah:'c', boo:3}
+  var testCase1 = {blah:'d', boo:4}
+  return [testCase1, testCase2, testCase3, testCase4, testCase5];
+}
+
+/*
 function openCases()
 {
   /*
@@ -194,22 +229,23 @@ function openCases()
   {
     numberOfCases = 0;
   }
-  */
+  *
 
-  var testCase1 = {name:'QSC 1', info:'1x QSC K10.2', equipment_count:1}
-  var testCase2 = {name:'QSC 2', info:'1x QSC K10.2', equipment_count:1}
-  var testCase3 = {name:'Cables', info:'14x GLS XLR Cable', equipment_count:14}
-  var testCase4 = {name:'Megapars 1', info:'8x ADJ Megapar RGBUV', equipment_count:8}
-  var testCase5 = {name:'Megapars 2', info:'8x ADJ Megapar RGBUV', equipment_count:8}
-
-  var cases = [testCase1, testCase2, testCase3, testCase4, testCase5];
-  return cases;
+  return
 
 }
+*/
 
 function openCaseList()
 {
   document.getElementById('leftPanel').style.display = 'block';
+  curScreen = 1;
+}
+
+function closeCaseList()
+{
+  document.getElementById('leftPanel').style.display = 'none';
+  curScreen = 0;
 }
 
 app.initialize();

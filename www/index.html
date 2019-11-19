@@ -33,23 +33,26 @@
             </tbody>
           </table>
           <form>
-            <input type="number" id="caseIDForm" placeholder="Case ID">
+            <input type="number" id="caseIDForm" placeholder="Case ID"><br>
           </form>
-          <button id="submitCaseButton">Open</button><br><br><br>
-          <button id="closeCaseFormPopup">Cancel</button>
-          <button id="clearStorageButton">Clear Storage</button>
+            <button id="submitCaseButton">Open</button>
+          <!--<form>
+            <button id="cancelCasePopup">Cancel</button>
+          </form>-->
+          <br><br><br>
+          <button id="clearStorageButton">Clear Local Storage</button>
         </div>
       </div>
       <div class="popup" id="caseFormPopup">
         <div class="header">
-          <span class="headerText" id="caseFormName">New Case</span>
+          <input type="text" class="headerText" id=caseFormName></input>
         </div>
         <div class="popupBody">
           <form>
-            <textarea id="caseInfoInput" placeholder="New Case"></textarea><br>
-            <button id="submitFormButton">Submit</button>
-            <button id="closeCaseFormPopup">Cancel</button><br>
+            <textarea id="caseInfoInput" placeholder="Add info here"></textarea><br>
           </form>
+          <button id="submitFormButton">Save</button>
+          <!--<button id="cancelFormPopup">Cancel</button><br>-->
         </div>
       </div>
     </div>
