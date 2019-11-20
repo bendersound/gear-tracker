@@ -86,7 +86,7 @@ function scanQR()
     else
     {
       {
-        var idPair = content.split(':', 2);
+        var idPair = content.split('.', 2);
         if (idPair[0] === 'gear_tracker') {
           var id = parseInt(idPair[1]);
           openCaseForm(id);
