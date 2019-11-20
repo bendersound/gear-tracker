@@ -24,39 +24,41 @@
         <div class="popupBody">
           <table id="caseList">
             <!--<thead>
-              <trow>
-                <th>Name</td>
-                <th>Items</td>
-              </trow>
-            </thead>-->
+            <trow>
+              <th>Name</td>
+              <th>Items</td>
+            </trow>
+          </thead>-->
             <tbody>
             </tbody>
           </table>
           <form>
             <input type="number" id="caseIDForm" placeholder="Case ID"><br>
           </form>
-            <button id="submitCaseButton">Open</button>
+          <button id="submitCaseButton">Open</button>
           <!--<form>
-            <button id="cancelCasePopup">Cancel</button>
-          </form>-->
+          <button id="cancelCasePopup">Cancel</button>
+        </form>-->
           <br><br><br>
           <button id="clearStorageButton">Clear Local Storage</button>
         </div>
       </div>
       <div class="popup" id="caseFormPopup">
-        <div class="header">
-          <input type="text" class="headerText" id=caseFormName></input>
-        </div>
-        <div class="popupBody">
-          <form>
+        <form id="caseForm">
+          <div class="header">
+            <input type="text" class="headerText" id=caseFormName placeholder="New Case"></input>
+          </div>
+          <div class="popupBody">
             <textarea id="caseInfoInput" placeholder="Add info here"></textarea><br>
-          </form>
-          <button id="submitFormButton">Save</button>
-          <!--<button id="cancelFormPopup">Cancel</button><br>-->
-        </div>
+            <button type="submit" id="submitFormButton">Save</button>
+            <!--<button id="cancelFormPopup">Cancel</button><br>-->
+          </div>
+        </form>
       </div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
   </body>
 </html>
