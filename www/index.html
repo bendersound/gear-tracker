@@ -1,64 +1,61 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <title>Gear Tracker</title>
-  </head>
-  <body>
-    <div class="header">
-      <span class="headerText">Gear Tracker</span>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <title>Gear Tracker</title>
+</head>
+<body>
+  <div class="header">
+    <span class="headerText">Gear Tracker</span>
+  </div>
+  <div class="app">
+    <div class="bottomBar">
+      <button id="cameraButton">Scan</button>
+      <button id="openCaseList">Search</button>
     </div>
-    <div class="app">
-      <div class="bottomBar">
-        <button id="cameraButton">Scan</button>
-        <button id="openCaseList">Search</button>
+    <div class="popup" id="leftPanel">
+      <div class="header">
+        <span class="headerText" id="caseListName">Cases</span>
       </div>
-      <div class="popup" id="leftPanel">
+      <div class="popupBody">
+        <table id="caseList">
+          <tbody>
+          </tbody>
+        </table>
+        <div style="display: flex; justify-content: flex-end;">
+          <button id="createCaseButton" style=font-size: 20;">+</button>
+        </div>
+        <button id="clearStorageButton">Delete all cases</button><br><br>
+        <form>
+          <input type="number" id="caseIDForm" placeholder="Case ID"><br>
+        </form>
+        <button id="submitCaseButton">Open</button>
+        <button id="generateQRButton">Generate QR</button>
+        <div id="tmpQRFrame"></div>
+        <br><br><br>
+      </div>
+    </div>
+    <div class="popup" id="caseFormPopup">
+      <form id="caseForm">
         <div class="header">
-          <span class="headerText" id="caseListName">Cases</span>
+          <input type="text" class="headerText" id=caseFormName placeholder="New Case"></input>
         </div>
         <div class="popupBody">
-          <table id="caseList">
-            <!--<thead>
-            <trow>
-              <th>Name</td>
-              <th>Items</td>
-            </trow>
-          </thead>-->
-            <tbody>
-            </tbody>
-          </table>
-          <form>
-            <input type="number" id="caseIDForm" placeholder="Case ID"><br>
-          </form>
-          <button id="submitCaseButton">Open</button>
-          <!--<form>
-          <button id="cancelCasePopup">Cancel</button>
-        </form>-->
-          <br><br><br>
-          <button id="clearStorageButton">Clear Local Storage</button>
+          <textarea id="caseInfoInput" placeholder="Add info here"></textarea><br>
+          <button type="button" id="submitFormButton">Save</button>
+
         </div>
-      </div>
-      <div class="popup" id="caseFormPopup">
-        <form id="caseForm">
-          <div class="header">
-            <input type="text" class="headerText" id=caseFormName placeholder="New Case"></input>
-          </div>
-          <div class="popupBody">
-            <textarea id="caseInfoInput" placeholder="Add info here"></textarea><br>
-            <button type="submit" id="submitFormButton">Save</button>
-            <!--<button id="cancelFormPopup">Cancel</button><br>-->
-          </div>
-        </form>
-      </div>
+      </form>
     </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-    <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
-  </body>
+  </div>
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+</body>
 </html>

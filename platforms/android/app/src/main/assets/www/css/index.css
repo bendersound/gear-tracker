@@ -58,17 +58,23 @@ tr {
 }
 
 th {
-  width: 50%;
-  font-size: 18px;
+  font-size: 13px;
   padding: 13px;
+  background-color: #eee;
 }
 
 td {
-  width: 50%;
-  align-content: center;
   font-size: 13px;
   padding: 13px;
-  border: 1px solid gray;
+  background-color: #ddd;
+}
+
+button {
+  font-size: 15px;
+  margin: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 2px;
 }
 
 .header {
@@ -82,7 +88,7 @@ td {
   color: white !important;
   text-shadow: 0 0 2px black;
   margin: 0 0 0 60px;
-  padding: 0px
+  padding: 0px;
   vertical-align: middle;
   font-size: 22px;
   background: rgba(255, 255, 255, 0);
@@ -90,10 +96,15 @@ td {
 }
 
 .bottomBar {
-  height: 70px;
-  width: var(--content-width);
-  align: left;
-  text-align: center;
+  height: 65px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.alignRight {
+
 }
 
 /*todo*/

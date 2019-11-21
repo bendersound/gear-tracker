@@ -1,4 +1,4 @@
-import { parse } from "querystring";
+//import { parse } from "./js/jquery.qrcode.min.js" //"querystring";
 
 var app = {
   // Application Constructor
@@ -14,27 +14,28 @@ var app = {
 
     //Case list screen listeners
     document.getElementById('submitCaseButton').addEventListener('click', openCaseFormManual);
+    document.getElementById('createCaseButton').addEventListener('click', openCaseFormNew);
     document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
+    document.getElementById('generateQRButton').addEventListener('click', generateQRManual);
 
     //Case form screen listeners
     document.getElementById('submitFormButton').addEventListener('click', submitForm);
 
     //Initializes disk storage object
     var localStorage = window.localStorage;
-    var caseList = [];
-    var numberOfCases;
+    var caseList;
+    //var sortedCaseList;
     var caseIDText;
     var curScreen = 0;
   },
 
   onDeviceReady: function()
   {
-      //this.receivedEvent('deviceready');
-      openCamera();
-      caseList = openTestCases1();
-      renderCaseList(caseList);
-      console.log('device ready');
-      //popupDialog('Test', 'Success');
+    openCamera();
+    caseList = openCases();
+
+    renderCaseList(caseList);
+    console.log('device ready');
   },
 
   onPause: function()
@@ -62,8 +63,6 @@ var app = {
 // Popup dialog for testing
 function popupDialog(title, message)
 {
-    alert(message);
-    /*
   var buttonName = 'Ok';
   navigator.notification.alert(message, alertCallback, title, buttonName);
 
@@ -71,7 +70,6 @@ function popupDialog(title, message)
   {
    console.log('Alert Dismissed');
   }
-  */
 }
 
 //pause the preview so users know a code is being scanned
@@ -89,7 +87,14 @@ function scanQR()
         var idPair = content.split('.', 2);
         if (idPair[0] === 'gear_tracker') {
           var id = parseInt(idPair[1]);
-          openCaseForm(id);
+          if (id < caseList.length)
+          {
+            openCaseForm(id);
+          }
+          else
+          {
+            popupDialog('Error', 'This QR code is for a case that does not exist');
+          }
         }
         else
         {
@@ -112,12 +117,31 @@ function scanQR()
 
 function generateQR(caseID)
 {
+  caseID = 'gear_tracker.' + caseID;
+  document.getElementById('tmpQRFrame').innerHTML = '';
+  if (typeof caseID !== 'undefined')
+  {
+    jQuery(function () {
+      jQuery('#tmpQRFrame').qrcode(caseID);
+    })
+  }
+}
+
+function generateQRManual() {
+  var input = document.getElementById('caseIDForm').value;
+  generateQR(input);
+}
+
+/*
+function generateQR(caseID)
+{
   caseID = 'gear_tracker:' + caseID;
   document.getElementById('qrFrame').innerHTML = '';
   jQuery(function () {
     jQuery('#qrFrame').qrcode(caseID);
   })
 }
+*/
 //Initialize and show qr code scanner
 function openCamera()
 {
@@ -144,34 +168,33 @@ function openCamera()
 function submitForm()
 {
   //Store form text
+  var updated = false;
   var caseNameText = document.getElementById('caseFormName').value;
   var caseInfoText = document.getElementById('caseInfoInput').value;
-  var updated = false;
-
-  //popupDialog('Test', this.numberOfCases.toString());
-  if (typeof caseList[caseIDText] === 'undefined') 
-  {
-      caseList[caseIDText] = {'name': caseNameText, 'info': caseInfoText};
-      updated = true;
-  }
-  else
-  {
-    if (typeof caseInfoText !== 'undefined' && caseInfoText !== caseList[caseIDText].info)
-    {
+  
+  if (typeof caseList[caseIDText] !== 'undefined') {
+    if (typeof caseInfoText !== 'undefined' && caseInfoText !== caseList[caseIDText].info) {
       caseList[caseIDText].info = caseInfoText;
       updated = true;
     }
 
-    if (typeof caseNameText !== 'undefined' && caseIDText !== caseList[caseIDText].name)
-    {
+    if (typeof caseNameText !== 'undefined' && caseIDText !== caseList[caseIDText].name) {
       caseList[caseIDText].name = caseNameText;
       updated = true;
     }
   }
-  if (updated)
-  {
-      popupDialog('' , 'Information updated successfully');
+  else if (caseIDText === caseList.length) {
+    caseList.push({ name: caseNameText, info: caseInfoText, equipment_count: 0 });
+    updated = true;
   }
+  else
+  {
+    popupDialog('Error!', 'Case could not be saved');
+    return;
+  }
+
+  if (updated) renderCaseList();
+  popupDialog('Success!' , 'Information updated');
 }
 
 //open form for viewing
@@ -179,12 +202,18 @@ function submitForm()
 function openCaseForm(caseID)
 {
   //document.getElementById('caseForm').reset();
-
-  if (typeof caseList[caseID] !== 'undefined')
-  {
+  if (typeof caseList[caseID] !== 'undefined') {
     document.getElementById('caseFormName').value = caseList[caseID].name;
     document.getElementById('caseInfoInput').value = caseList[caseID].info;
-    caseIDText = caseID;
+  }
+  else if (caseID === caseList.length)
+  {
+    document.getElementById('caseForm').reset();
+  }
+  else
+  {
+    popupDialog('Error!', 'Cannot open case');
+    return;
   }
   caseIDText = caseID;
   document.getElementById('caseFormPopup').style.display = 'block';
@@ -195,7 +224,18 @@ function openCaseForm(caseID)
 function openCaseFormManual()
 {
   const caseIDText = document.getElementById('caseIDForm').value;
-  openCaseForm(caseIDText);
+  if (caseIDText < caseList.length) {
+    openCaseForm(caseIDText);
+  }
+  else
+  {
+    popupDialog('Error!', 'Case does not exist. Create a new case.');
+  }
+}
+
+function openCaseFormNew()
+{
+  openCaseForm(caseList.length);
 }
 
 function closeCaseForm()
@@ -208,29 +248,37 @@ function closeCaseForm()
 function clearLocalStorage()
 {
   localStorage.clear();
-  var listParent = document.getElementById('caseList');
-  var cases = [{'tmp': 'No cases here!'}]
-  renderList(cases, header, listParent, 0);
-  numberOfCases = 0;
-  popupDialog('', 'Local storage cleared');
+  renderEmptyCaseList();
+  caseList = [];
+  popupDialog('Success', 'Local storage cleared');
 }
 
 function renderList(items, header, parent, childIndex)
 {
   var tBody = document.createElement("tbody");
-  var tRow;
+  var tRow = document.createElement("tr");
   var newCell;
   var i = 0;
+
+ 
+  for (var headerProp in header)
+  {
+    newCell = document.createElement("th");
+    newCell.innerHTML = header[headerProp];
+    tRow.appendChild(newCell);
+  }
+  tBody.appendChild(tRow);
+  
+
   for (i = 0; i < items.length; i++)
   {
     tRow = document.createElement("tr");
     //tableRow.setAttribute('data-href', 'javascript:openCaseForm(' + items[i].name + ');');
 
-    for (var cellValue in items[i])
+    for (var propertyValue in header)
     {
       newCell = document.createElement("td");
-      newCell.innerHTML = cellValue;
-      newCell.innerHTML = i;
+      newCell.innerHTML = items[i][propertyValue];
       tRow.appendChild(newCell);
     }
     tBody.appendChild(tRow);
@@ -240,20 +288,33 @@ function renderList(items, header, parent, childIndex)
 
 function renderEmptyCaseList()
 {
-    var listParent = document.getElementById('caseList');
-    var cases = [{ 'tmp': 'No cases here!' }]
-    renderList(cases, header, listParent, 0);
+  var cases = [];
+  var header = { tmp: 'No cases here!' };
+  var listParent = document.getElementById('caseList');
+  renderList(cases, header, listParent, 0);
 }
 
-function renderCaseList(cases)
+function renderCaseList()
 {
-  if (typeof cases === 'undefined')
+  /*sortedCaseList = sortedCaseList.sort(function (e1, e2) {
+  var name1 = e1.name.toUpperCase();
+  var name2 = e2.name.toUpperCase();
+
+  if (name1 > name2) return 1;
+  if (name1 < name2) return -1;
+    return 0;
+  });
+  */
+
+  if (typeof caseList === 'undefined')
   {
       renderEmptyCaseList();
   }
-  var header = 0;
+
+  var header = { name: 'Name', equipment_count: 'Equipment Count' };
   var listParent = document.getElementById('caseList');
-  renderList(cases, header, listParent, 0);
+
+  renderList(caseList, header, listParent, 0);
 }
 
 function openTestCases0()
@@ -272,25 +333,13 @@ function openTestCases1()
   return [testCase1, testCase2, testCase3, testCase4, testCase5];
 }
 
-/*
 function openCases()
 {
   /*
-  tmpNumCases = localStorage.getItem('numberOfCases');
-  if (tmpNumCases != null)
-  {
-    numberOfCases = parseInt(tmpNumCases);
-  }
-  else
-  {
-    numberOfCases = 0;
-  }
-  *
-
-  return
-
+   var cases = localStorage.getItem('case_list');
+   */
+  return openTestCases1();
 }
-*/
 
 function openCaseList()
 {
