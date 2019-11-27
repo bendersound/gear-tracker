@@ -1,9 +1,5 @@
 root {
-  --bg-color: #eeeeee;
-  --main-text: black;
-  --highlight-color: #313131;
-  --highlight-text: white;
-  --content-width: 250px;
+
 }
 
 * {
@@ -28,7 +24,6 @@ body {
     left: 50%;
     top: 70%;
     height: 50px;
-    width: 250px;
     padding: 170px 0px 0px 0px;     /* content height is 170px */
     margin: -115px 0px 0px -112px;  /* offset vertical: half of content height */
                                    /* offset horizontal: half of content width */

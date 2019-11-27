@@ -1,4 +1,14 @@
-//import { parse } from "./js/jquery.qrcode.min.js" //"querystring";
+//Initializes SQLite server for local storage
+var localStorage = window.localStorage;
+
+//An array of all cases in the app
+var caseList = [];
+
+//Keeps track of the current case being operated on
+var caseIDText;
+
+//A stack containing a DOM element for each screen that has been opened by the user
+var screenStack = [];
 
 var app = {
   // Application Constructor
@@ -20,42 +30,29 @@ var app = {
 
     //Case form screen listeners
     document.getElementById('submitFormButton').addEventListener('click', submitForm);
-
-    //Initializes SQLite server for local storage
-    var localStorage = window.localStorage;
-
-    //An array of all cases in the app
-    var caseList;
-
-    //Keeps track of the current case being operated on
-    var caseIDText;
-
-    // DELETE ME
-    var curScreen = 0;
-
-    //A stack containing a DOM element for each screen that has been opened by the user
-    var screens = [];
   },
 
   onDeviceReady: function()
   {
     openCamera();
+    //openTestCases1();
     caseList = openCases();
 
-    renderCaseList(caseList);
+    renderCaseList();
     console.log('device ready');
   },
 
   //TODO
   onPause: function()
   {
-    localStorage.setItem('case_list', '');
+    storeCases();
   },
 
+  // Overrides the default back button functionality
   onBackKeyDown: function(e)
   {
     //If a screen has been opened, hide the most recent one
-    if (screens !== [])
+    if (screenStack.length !== 0)
     {
       hideCurrentElement();
       return;
@@ -69,6 +66,8 @@ var app = {
 // Improved alert dialog box
 function popupDialog(title, message)
 {
+  alert(message);
+  /*
   var buttonName = 'Ok';
   navigator.notification.alert(message, alertCallback, title, buttonName);
 
@@ -76,6 +75,7 @@ function popupDialog(title, message)
   {
    console.log('Alert Dismissed');
   }
+  */
 }
 
 //pause the preview so users know a code is being scanned
@@ -184,7 +184,8 @@ function submitForm()
   }
 
   if (updated) renderCaseList();
-  popupDialog('Success!' , 'Information updated');
+  popupDialog('Success!', 'Information updated');
+  storeCases();
 }
 
 //open form for viewing
@@ -310,7 +311,9 @@ function openTestCases1()
   var testCase4 = {name:'Megapars 1', info:'8x ADJ Megapar RGBUV', equipment_count:3}
   var testCase5 = {name:'Megapars 2', info:'8x ADJ Megapar RGBUV', equipment_count:4}
 
-  return [testCase1, testCase2, testCase3, testCase4, testCase5];
+  caseList = [testCase1, testCase2, testCase3, testCase4, testCase5];
+  storeCases();
+  caseList = [];
 }
 
 // load case data stored in disk
@@ -319,19 +322,24 @@ function openCases()
   /*
    var cases = localStorage.getItem('case_list');
    */
-  return openTestCases1();
+  return JSON.parse(localStorage.getItem('caseList'));
+}
+
+function storeCases()
+{
+  localStorage.setItem('caseList', JSON.stringify(caseList));
 }
 
 function displayElement(id)
 {
-  e = document.getElementById(id);
-  e.style.display = 'block';
-  screens.push(e);
+  document.getElementById(id).style.display = 'block';
+  screenStack.push(id);
 }
 
 function hideCurrentElement()
 {
-  //pop element screens.split
+  id = screenStack.pop();
+  document.getElementById(id).style.display = 'none';
 }
 
 app.initialize();
