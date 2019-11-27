@@ -13,14 +13,14 @@ root {
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    -webkit-user-select: none;                  /* prevent copy paste */
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
     font-size: 12px;
     height: 100vh;
     margin: 0px;
     padding: 0px;
     /* Padding to avoid the "unsafe" areas behind notches in the screen */
-    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-right, 0px);
+    /*padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-right, 0px);*/
     width: 100%;
 }
 
@@ -30,8 +30,7 @@ body {
     left: 50%;
     top: 70%;
     height: 50px;                   /* content area height */
-    width: var(--width);                   /* text area width */
-    text-align: absolute;
+    width: 250px;                 /* text area width */
     padding: 170px 0px 0px 0px;     /* image height is 170px */
     margin: -115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
                                    /* offset horizontal: half of text area width */
@@ -61,12 +60,14 @@ th {
   font-size: 13px;
   padding: 13px;
   background-color: #eee;
+  max-width: 100%;
 }
 
 td {
   font-size: 13px;
   padding: 13px;
   background-color: #ddd;
+  max-width: 50%;
 }
 
 button {

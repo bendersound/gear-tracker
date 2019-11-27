@@ -1,0 +1,8 @@
+To run this project
+1. Install Apache Cordova
+2. Open a terminal/command line in the root directory of the project
+3. In cmd type, "cordova run [TARGET]"
+
+Leaving [TARGET] blank will result in cordova running the project in any
+emulators found. To run on an android device, replace [TARGET] with "android"
+
