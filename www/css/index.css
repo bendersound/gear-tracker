@@ -1,9 +1,5 @@
 root {
-  --bg-color: #eeeeee;
-  --main-text: black;
-  --highlight-color: #313131;
-  --highlight-text: white;
-  --content-width: 250px;
+
 }
 
 * {
@@ -13,103 +9,122 @@ root {
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    -webkit-user-select: none;                  /* prevent copy paste */
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
     font-size: 12px;
     height: 100vh;
     margin: 0px;
     padding: 0px;
-    /* Padding to avoid the "unsafe" areas behind notches in the screen */
-    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-right, 0px);
     width: 100%;
 }
 
-/* Portrait layout (default) */
+/* Portrait layout */
 .app {
-    position: absolute;             /* position in the center of the screen */
+    position: absolute;
     left: 50%;
     top: 70%;
-    height: 50px;                   /* content area height */
-    width: var(--width);                   /* text area width */
-    text-align: absolute;
-    padding: 170px 0px 0px 0px;     /* image height is 170px */
-    margin: -115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-                                   /* offset horizontal: half of text area width */
+    height: 50px;
+    padding: 170px 0px 0px 0px;     /* content height is 170px */
+    margin: -115px 0px 0px -112px;  /* offset vertical: half of content height */
+                                   /* offset horizontal: half of content width */
 }
 
-/* Landscape layout (with min-width) */
+/* Landscape layout */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
     .app {
         overflow: hidden;
         background-position: left center;
-        padding: 75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin: -90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
+        padding: 75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = content height */
+        margin: -90px 0px 0px -198px;  /* offset vertical: half of content height */
+                                      /* offset horizontal: half of content width */
     }
 }
 
-h1 {
-    font-size: 24px;
-    font-weight: normal;
+table {
+  margin: 0px;
+  font-size: 13px;
+  padding: 13px;
 }
 
-h2 {
-  font-size: 22px;
-  font-weight: normal;
+th {
+  background-color: #eee;
+  max-width: 100%;
+}
+
+td {
+  background-color: #ddd;
+  max-width: 50%;
+}
+
+button {
+  font-size: 15px;
+  margin: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 2px;
+}
+
+textarea {
+  height: 100px;
 }
 
 .header {
   position: fixed;
-  height: 40px;
-  line-height: 40px;
-  color: white;
-  text-shadow: 0 0 2px black;
 }
 
 .headerText {
+  height: 40px;
+  line-height: 40px;
+  width: 70%;
+  color: white !important;
+  text-shadow: 0 0 2px black;
   margin: 0 0 0 60px;
+  padding: 0px;
+  vertical-align: middle;
   font-size: 22px;
+  background: rgba(255, 255, 255, 0);
+  border: 0px solid;
 }
 
 .bottomBar {
-  height: 70px;
-  width: var(--content-width);
-  align: left;
-  text-align: center;
-}
-
-/*todo*/
-.event {
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    color: #FFFFFF;
-    font-size: 12px;
-    margin: 0px 30px;
-    padding: 2px 0px;
+  height: 65px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 
 .popup {
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   position: fixed;
   overflow: auto;
   display: none;
+  border-radius: 0px;
 }
 
-.popupForm {
-  width: 97%;
-  padding: 10px 50px;
+.popupBody {
+  left: 0px;
+  height: 100vh;
+  width: 72vw;
+  padding: 15px 50px;
+  margin: 40px 0px;
+  position: fixed;
+  overflow: scroll;
   border-radius: 5px;
-  background-color: #eee /*var(--bg-color);*/
+  background-color: #eee
 }
 
-#caseFormPopup {
+#leftPanel {
   background-color: #9933cc;
 }
 
-textarea {
-  width: 100%;
-  height: 100px;
+#caseFormPopup {
+  background-color: #6666ff;
 }
+
+#gearFormPopup {
+  background-color: #ff6666 
+}
+

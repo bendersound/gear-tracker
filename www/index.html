@@ -1,43 +1,60 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <title>Gear Tracker</title>
-  </head>
-  <body>
-    <div class="header">
-      <span class="headerText">Gear Tracker</span>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <title>Gear Tracker</title>
+</head>
+<body>
+  <div class="header">
+    <span class="headerText">Gear Tracker</span>
+  </div>
+  <div class="app">
+    <div class="bottomBar">
+      <button id="cameraButton">Scan</button>
+      <button id="openCaseList">Search</button>
     </div>
-    <div class="app">
-      <div class="popup" id="caseFormPopup">
-        <div class="header">
-          <span class="headerText" id="caseFormName">Error</span>
-        <form class="popupForm">
-          <textarea id="caseInfoInput" placeholder="New Case"></textarea><br>
-          <button id="submitFormButton">Submit</button>
-          <button id="closeCaseFormPopup">Cancel</button><br>
+    <div class="popup" id="leftPanel">
+      <div class="header">
+        <span class="headerText" id="caseListName">Cases</span>
+      </div>
+      <div class="popupBody">
+        <table id="caseList">
+          <tbody>
+          </tbody>
+        </table>
+        <div style="display: flex; justify-content: flex-end;">
+          <button id="createCaseButton" style=font-size: 20;">+</button>
+        </div>
+        <button id="clearStorageButton">Delete all cases</button><br><br>
+        <form>
+          <input type="number" id="caseIDForm" placeholder="Case ID"><br>
         </form>
+        <button id="submitCaseButton">Open</button>
+        <br><br><br>
       </div>
     </div>
-      <div class="bottomBar">
-        <div class="camera">
-          <button id="cameraButton">Scan</button>
+    <div class="popup" id="caseFormPopup">
+      <form id="caseForm">
+        <div class="header">
+          <input type="text" class="headerText" id=caseFormName placeholder="New Case"></input>
         </div>
-        <br>
-        <div class="gearForm">
-          <form>
-            <input type="text" id="caseIDForm" placeholder="Case ID"><br>
-          </form>
-          <button id="submitCaseButton">Open</button>
-          <button id="clearStorageButton">Clear Storage</button><br><br><br>
+        <div class="popupBody">
+          <textarea id="caseInfoInput" placeholder="Add info here"></textarea><br>
+          <button type="button" id="submitFormButton">Save</button>
+          <button type="button" id="generateQRButton">Generate QR</button>
+          <div id="tmpQRFrame"></div>
         </div>
-      </div>
+      </form>
     </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-  </body>
+  </div>
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+</body>
 </html>
