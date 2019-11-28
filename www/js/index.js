@@ -35,7 +35,7 @@ var app = {
   onDeviceReady: function()
   {
     openCamera();
-    //openTestCases1();
+    openTestCases1();
     caseList = openCases();
     renderCaseList();
 
