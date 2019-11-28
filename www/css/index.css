@@ -11,7 +11,7 @@ body {
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste */
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
-    font-size: 12px;
+    font-size: 16px;
     height: 100vh;
     margin: 0px;
     padding: 0px;
@@ -24,6 +24,7 @@ body {
     left: 50%;
     top: 70%;
     height: 50px;
+    width: 250px;
     padding: 170px 0px 0px 0px;     /* content height is 170px */
     margin: -115px 0px 0px -112px;  /* offset vertical: half of content height */
                                    /* offset horizontal: half of content width */
@@ -42,7 +43,7 @@ body {
 
 table {
   margin: 0px;
-  font-size: 13px;
+  width: 100%;
   padding: 13px;
 }
 
@@ -66,6 +67,7 @@ button {
 
 textarea {
   height: 100px;
+  width: 100%;
 }
 
 .header {
@@ -125,6 +127,5 @@ textarea {
 }
 
 #gearFormPopup {
-  background-color: #ff6666 
+  background-color: #ff6666
 }
-
