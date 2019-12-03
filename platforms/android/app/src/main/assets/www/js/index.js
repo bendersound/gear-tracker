@@ -1,4 +1,4 @@
-//Initializes SQLite server for local storage
+//SQLite server for local storage
 var localStorage = window.localStorage;
 
 //An array of all cases in the app
@@ -7,7 +7,7 @@ var caseList = [];
 //Keeps track of the current case being operated on
 var caseIDText;
 
-//A stack containing a DOM element for each screen that has been opened by the user
+//A stack containing a DOM element id for each screen that has been opened by the user
 var screenStack = [];
 
 var app = {
@@ -26,7 +26,7 @@ var app = {
     document.getElementById('submitCaseButton').addEventListener('click', openCaseFormManual);
     document.getElementById('createCaseButton').addEventListener('click', openCaseFormNew);
     document.getElementById('clearStorageButton').addEventListener('click', clearLocalStorage);
-    document.getElementById('generateQRButton').addEventListener('click', generateQRManual);
+    document.getElementById('generateQRButton').addEventListener('click', exportQR);
 
     //Case form screen listeners
     document.getElementById('submitFormButton').addEventListener('click', submitForm);
@@ -35,10 +35,10 @@ var app = {
   onDeviceReady: function()
   {
     openCamera();
-    //openTestCases1();
+    openTestCases1();
     caseList = openCases();
-
     renderCaseList();
+
     console.log('device ready');
   },
 
@@ -117,19 +117,54 @@ function scanQR()
 //TODO export qr
 function generateQR(caseID)
 {
-  caseID = 'gear_tracker.' + caseID;
-  document.getElementById('tmpQRFrame').innerHTML = '';
-  if (typeof caseID !== 'undefined')
+  var qrText = 'gear_tracker.' + caseID;
+  var frame = document.getElementById('qrFrame')
+  var output;
+  frame.innerHTML = '';
+  if (typeof qrText !== 'undefined')
   {
-    jQuery(function () {
-      jQuery('#tmpQRFrame').qrcode(caseID);
-    })
+    $(frame).qrcode({text: qrText});
+    output = document.querySelector('canvas').toDataURL();
   }
+  return output;
 }
 
 //TODO this might not need to be in here
-function generateQRManual() {
+function generateQRManual()
+{
   generateQR(caseIDText);
+}
+
+
+//Exports the QR code by sharing it with another app
+function exportQR()
+{
+  var base64Data = generateQR(caseIDText);
+  if (base64Data === 'undefined')
+  {
+    popupDialog('Error', 'Cannot Generate QR Code');
+    return;
+  }
+  /*
+  var options = {
+    message: 'Here is the QR Code for ' + caseList[caseIDText].name,
+    subject: 'Gear Tracker QR Code',
+    files: ['']
+  };
+
+  var onSuccess = function(result) {
+    console.log("Share completed: " + result.completed); // On Android apps mostly return false even while it's true
+    console.log("Shared to app: " + result.app); // On Android result.app since plugin version 5.4.0 this is no longer empty. On iOS it's empty when sharing is cancelled (result.completed=false)
+  };
+
+  var onError = function(msg) {
+    console.log("Sharing failed with message: " + msg);
+  };
+
+  window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
+  */
+  window.plugins.socialsharing.sha
+  window.plugins.socialsharing.share(null, caseList[caseIDText].name, base64Data, null);
 }
 
 // Initializes the QR scanner
@@ -161,7 +196,7 @@ function submitForm()
   var updated = false;
   var caseNameText = document.getElementById('caseFormName').value;
   var caseInfoText = document.getElementById('caseInfoInput').value;
-  
+
   if (typeof caseList[caseIDText] !== 'undefined') {
     if (typeof caseInfoText !== 'undefined' && caseInfoText !== caseList[caseIDText].info) {
       caseList[caseIDText].info = caseInfoText;
@@ -183,7 +218,11 @@ function submitForm()
     return;
   }
 
-  if (updated) renderCaseList();
+  if (updated)
+  {
+    renderCaseList();
+    document.getElementById('generateQRButton').disabled = false;
+  }
   popupDialog('Success!', 'Information updated');
   storeCases();
 }
@@ -201,13 +240,9 @@ function openCaseForm(caseID)
   {
     document.getElementById('caseForm').reset();
   }
-  else if (caseID > caseList.length)
+  else if (caseID >= caseList.length)
   {
     popupDialog('Error!', 'Case does not exist. Create a new case.');
-  }
-  else
-  {
-    popupDialog('Error!', 'Cannot open case');
     return;
   }
   caseIDText = caseID;
@@ -223,6 +258,7 @@ function openCaseFormManual()
 // Create a new case and open the form for that case
 function openCaseFormNew()
 {
+  document.getElementById('generateQRButton').disabled = true;
   openCaseForm(caseList.length);
 }
 
@@ -234,8 +270,8 @@ function openCaseList() {
 function clearLocalStorage()
 {
   localStorage.clear();
-  renderEmptyCaseList();
   caseList = [];
+  renderEmptyCaseList();
 }
 
 // render a list of objects within a table which is then added to the given index of the given parent
@@ -247,7 +283,7 @@ function renderList(items, header, parent, childIndex)
   var newCell;
   var i = 0;
 
- 
+
   for (var headerProp in header)
   {
     newCell = document.createElement("th");
@@ -255,7 +291,7 @@ function renderList(items, header, parent, childIndex)
     tRow.appendChild(newCell);
   }
   tBody.appendChild(tRow);
-  
+
 
   for (i = 0; i < items.length; i++)
   {
@@ -285,21 +321,16 @@ function renderEmptyCaseList()
 // renders the items in the case list
 function renderCaseList()
 {
-  if (typeof caseList === 'undefined')
+  if (caseList.length === 0)
   {
-      renderEmptyCaseList();
+    renderEmptyCaseList();
+    return;
   }
 
   var header = { name: 'Name', equipment_count: 'ID' };
   var listParent = document.getElementById('caseList');
 
   renderList(caseList, header, listParent, 0);
-}
-
-// testing
-function openTestCases0()
-{
-    return [];
 }
 
 // testing
@@ -319,10 +350,12 @@ function openTestCases1()
 // load case data stored in disk
 function openCases()
 {
-  /*
-   var cases = localStorage.getItem('case_list');
-   */
-  return JSON.parse(localStorage.getItem('caseList'));
+  var cases = JSON.parse(localStorage.getItem('caseList'));
+  if (cases === null)
+  {
+    cases = [];
+  }
+  return cases;
 }
 
 function storeCases()
