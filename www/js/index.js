@@ -174,40 +174,40 @@ function submitForm()
   var caseNameText = document.getElementById('caseFormName').value;
   var caseInfoText = document.getElementById('caseInfoInput').value;
 
-  // If the case being stored already exists, update the existing data
-  if (typeof caseList[caseIDText] !== 'undefined') {
-    if (typeof caseInfoText !== 'undefined' && caseInfoText !== caseList[caseIDText].info) {
-      caseList[caseIDText].info = caseInfoText;
+  // If the case has a name
+  if (caseNameText !== '') {
+    // If the case being stored already exists, update the existing data
+    if (typeof caseList[caseIDText] !== 'undefined') {
+      if (caseInfoText !== caseList[caseIDText].info) {
+        caseList[caseIDText].info = caseInfoText;
+        updated = true;
+      }
+
+      if (caseNameText !== caseList[caseIDText].name) {
+        caseList[caseIDText].name = caseNameText;
+        updated = true;
+      }
+    }
+
+    // If the case being stored is a new case, create a new entry in the array
+    else if (caseIDText === caseList.length) {
+      caseList.push({ name: caseNameText, info: caseInfoText, equipment_count: caseIDText});
+
+      // Allows users to generate QR codes for a new case only after data has been saved for that case
+      document.getElementById('generateQRButton').disabled = false;
       updated = true;
     }
 
-    if (typeof caseNameText !== 'undefined' && caseIDText !== caseList[caseIDText].name) {
-      caseList[caseIDText].name = caseNameText;
-      updated = true;
+    // If any info has been changed, re-render the case list
+    if (updated)
+    {
+      renderCaseList();
     }
-  }
-
-  // If the case being stored is a new case, create a new entry in the array
-  else if (caseIDText === caseList.length) {
-    caseList.push({ name: caseNameText, info: caseInfoText, equipment_count: caseIDText});
-
-    // Allows users to generate QR codes for a new case only after data has been saved for that case
-    document.getElementById('generateQRButton').disabled = false;
-    updated = true;
-  }
-  else
-  {
-    popupDialog('Error!', 'Case could not be saved');
+    popupDialog('Success!', 'Information updated');
+    storeCases();
     return;
   }
-
-  // If any info has been changed, re-render the case list
-  if (updated)
-  {
-    renderCaseList();
-  }
-  popupDialog('Success!', 'Information updated');
-  storeCases();
+  popupDialog('', 'Case needs a name to be saved');
 }
 
 // Open case form for viewing
